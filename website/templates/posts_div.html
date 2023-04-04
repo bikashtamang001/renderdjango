@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %} 
+{% endblock %}
+
+{% block content %} 
+
+<h1 align = "center">{% block header %}Posts{% endblock %}</h1>
+
+{% for post in pages.items %} 
+<div class="card border-dark-lg">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <a href="/posts/{{post.user.username}}" style="text-decoration:none;"><h4>{{post.user.username}}</h4></a>
+      
+        {% if user.id == post.author %}
+        <div class="delete">
+            <a href="/delete-post/{{post.id}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg></a>
+        </div>
+        {% endif %}
+      
+    </div>
+    <div class="text-muted">{{post.date_created}}</div>
+
+
+  </div>
+  <div class="card-body">
+      <div class="card-text">{{post.text}}</div>
+  </div>
+    
+    
+</div>
+  <br><br>
+    
+    {% endfor %}
+    
+
+    <nav aria-label="...">
+        <ul class="pagination">
+          <li class="page-item {% if not pages.has_prev %}disabled {% endif %}">
+            <a class="page-link" href="./?page={{pages.prev_num}}" >Previous</a>
+          </li>
+
+          {% for page in pages.iter_pages() %} 
+
+          <li class="page-item {% if page == pages.page%}active{% endif %}">
+            <a class="page-link" href="./?page={{page}}">{{page}} </a>
+          </li>
+          {% endfor %}
+          <li class="page-item {% if not pages.has_next %}disabled {% endif %}">
+            <a class="page-link" href="./?page={{pages.next_num}}">Next</a>
+          </li>
+        </ul>
+      </nav>
+      {% block footer %}
+      <div align="center">
+          <a href="/create-post"><button type="button" class="btn btn-primary btn-lg">Create a post</button></a>
+      </div>
+      {% endblock %}
+
+{% endblock %}
